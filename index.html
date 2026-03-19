@@ -262,17 +262,7 @@ textarea::placeholder{color:rgba(125,133,144,.45);}
 </head>
 <body>
 
-<!-- ═══════════════════════════════════════════
-     TELA DE CARREGAMENTO
-═══════════════════════════════════════════ -->
-<div id="appLoading">
-  <div style="display:flex;align-items:center;gap:10px;font-size:1.1rem;font-weight:800;">
-    <div style="width:36px;height:36px;border-radius:9px;background:linear-gradient(135deg,#00d9a3,#7c6aff);display:flex;align-items:center;justify-content:center;font-size:18px;">📋</div>
-    Edu<span style="color:#00d9a3;">Track</span>
-  </div>
-  <div class="spin"></div>
-  <div style="font-size:.75rem;color:#7d8590;">Conectando ao servidor...</div>
-</div>
+<div id="appLoading" style="display:none;"></div>
 
 <!-- ═══════════════════════════════════════════
      TELA DE LOGIN
@@ -313,7 +303,7 @@ textarea::placeholder{color:rgba(125,133,144,.45);}
     <div class="logo"><div class="logo-icon">📋</div>Edu<em>Track</em></div>
     <div class="h-right">
       <span class="role-badge" id="roleBadge"></span>
-      <button class="logout-btn" onclick="doLogout()">Sair</button>
+
     </div>
   </div>
   <div class="h-sub">
@@ -536,55 +526,15 @@ var students = [
 // INICIALIZAÇÃO
 // ═══════════════════════════════════════════════════════════════
 function startApp() {
-  if (DEMO_MODE) {
-    // Sem Firebase: verifica se há sessão salva localmente
-    document.getElementById('configBanner').style.display = 'block';
-    var saved = sessionStorage.getItem('edutrack_user');
-    if (saved) {
-      try {
-        currentUser = JSON.parse(saved);
-        showApp();
-      } catch(e) {
-        showLogin();
-      }
-    } else {
-      showLogin();
-    }
-    return;
-  }
-
-  // Com Firebase real
-  try {
-    firebase.initializeApp(FIREBASE_CONFIG);
-    db     = firebase.firestore();
-    authFB = firebase.auth();
-
-    authFB.onAuthStateChanged(function(user) {
-      if (user) {
-        // Busca perfil do usuário no Firestore
-        db.collection('usuarios').doc(user.uid).get().then(function(doc) {
-          if (doc.exists) {
-            currentUser = doc.data();
-            currentUser.uid   = user.uid;
-            currentUser.email = user.email;
-          } else {
-            currentUser = {uid:user.uid, email:user.email, name:user.email, role:'professor'};
-          }
-          showApp();
-        }).catch(function() {
-          currentUser = {uid:user.uid, email:user.email, name:user.email, role:'professor'};
-          showApp();
-        });
-      } else {
-        showLogin();
-      }
-    });
-  } catch(e) {
-    console.error('Firebase erro:', e);
-    DEMO_MODE = true;
-    document.getElementById('configBanner').style.display = 'block';
-    showLogin();
-  }
+  // Entra direto sem login
+  currentUser = {
+    uid:   'professor1',
+    email: 'leticiaholandaestudopdf@gmail.com',
+    name:  'Prof. Leticia Holanda',
+    role:  'diretor',
+    turma: '7B'
+  };
+  showApp();
 }
 
 function showLogin() {
