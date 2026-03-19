@@ -472,17 +472,29 @@ var FIREBASE_CONFIG = {
 // ═══════════════════════════════════════════════════════════════
 // MODO DEMO: quando Firebase não está configurado, usa memória
 // ═══════════════════════════════════════════════════════════════
-var DEMO_MODE = false; // Firebase configurado
+var DEMO_MODE = true; // Mude para false quando configurar Firebase
 var db = null;
 var authFB = null;
 
 // Usuários demo para testar sem Firebase
 var DEMO_USERS = {
+  "leticiaholandaestudopdf@gmail.com": {
+    password: "leticia123",
+    name: "Leticia Holanda",
+    role: "diretor"
+  },
   "professor@escola.com": {
     password: "prof123",
     name: "Prof. Maria Costa",
     role: "professor",
     turma: "7B",
+    disciplina: "Matematica"
+  },
+  "professor2@escola.com": {
+    password: "prof456",
+    name: "Prof. Joao Silva",
+    role: "professor",
+    turma: "7A",
     disciplina: "Matematica"
   },
   "coordenador@escola.com": {
